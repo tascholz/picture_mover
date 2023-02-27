@@ -1,0 +1,238 @@
+#:kivy 1.11.0
+
+<Root>:
+    currentImage: currentImage
+    prevImage: prevImage
+    nextImage1: nextImage1
+    nextImage2: nextImage2
+    nextImage3: nextImage3
+    nextImage4: nextImage4
+    nextImage5: nextImage5
+    currentFilename: currentFilename
+    currentMove: currentMove
+    textLeft: textLeft
+    textRight: textRight
+    textUp: textUp
+
+    BoxLayout:
+        orientation: 'vertical'
+        #Menu
+        BoxLayout:
+            padding: 5
+            orientation:'horizontal'
+            size_hint: 1,None
+            size: 0, 30
+            canvas.before:
+                Color:
+                    rgb: 0x15 / 255.0, 0x15 / 255.0, 0x15 / 255.0
+                Rectangle:
+                    pos:self.pos
+                    size: self.size
+            Button:
+                size_hint: None, 1
+                size: 80, 0
+                background_normal: ''
+                background_color: 0x15 / 255.0, 0x15 / 255.0, 0x15 / 255.0
+                text:'Open Folder'
+                on_release: root.show_load()
+            Button:
+                size_hint: None, 1
+                size: 80, 0
+                background_normal: ''
+                background_color: 0x15 / 255.0, 0x15 / 255.0, 0x15 / 255.0
+                text:'History'
+                on_release: root.show_history()
+            Button:
+                size_hint: None, 1
+                size: 80, 0
+                background_normal: ''
+                background_color: 0x15 / 255.0, 0x15 / 255.0, 0x15 / 255.0
+                text:'Settings'
+                on_release: root.show_settings()
+
+        #Content
+        BoxLayout:
+            padding: 15
+            orientation:'vertical'
+            canvas.before:
+                Color:
+                    rgb: 0x32 / 255.0, 0x32 / 255.0, 0x32 / 255.0
+                Rectangle:
+                    pos:self.pos
+                    size: self.size
+            
+            #Preview
+            BoxLayout:
+                size_hint: 1, 1/4
+                orientation:'horizontal'
+                Image:
+                    opacity: 0
+                    id: nextImage1
+                    source: ''
+                Image:
+                    opacity: 0
+                    id: nextImage2
+                    source: ''
+                Image:
+                    opacity: 0
+                    id: nextImage3
+                    source: ''
+                Image:
+                    opacity: 0
+                    id: nextImage4
+                    source: ''
+                Image:
+                    opacity: 0
+                    id: nextImage5
+                    source: ''
+            BoxLayout:
+                orientation: 'horizontal'
+                #Current Image
+                BoxLayout:
+                    padding: 15
+                    orientation:'vertical'
+                    Image:
+                        canvas.before:
+                            Color:
+                                rgb: 0x32 / 255.0, 0x32 / 255.0, 0x32 / 255.0
+                            Rectangle:
+                                pos:self.pos
+                                size: self.size
+                        size_hint: 1, 1
+                        allow_stretch: True
+                        opacity: 0
+                        id: currentImage
+                        source: ''
+                    BoxLayout:
+                        orientation:'horizontal'
+                        size_hint: 1, None
+                        size: 0, "30dp"
+                        Label:
+                            id: currentFilename
+                            text:''
+                        Label:
+                            id: currentMove
+                            text:''
+                #Previous Image
+                BoxLayout:
+                    size_hint: 0.2, 1
+                    orientation:'vertical'
+                    GridLayout:
+                        padding: 20
+                        spacing: 0, 0
+                        row_default_height: 70
+                        row_force_default: True
+                        col_default_width: 70
+                        col_force_default: True
+                        #height: self.minimum_height
+                        cols: 3
+                        rows: 2
+                        
+                        RelativeLayout:
+                        #ArrowUp
+                        RelativeLayout:
+                            canvas.before:
+                                Color:
+                                    rgb: 0x64 / 255.0, 0x64 / 255.0, 0x32 / 255.0
+                                Rectangle:
+                                    pos:self.pos
+                                    size: self.size
+                            Image:
+                                source:'./assets/key.png'
+                            Label:
+                                id: textUp
+                                color: 0, 0, 0
+                                text:''
+                        RelativeLayout:
+                            
+                        
+                        #ArrowLeft
+                        RelativeLayout:
+                            Image:
+                                source:'./assets/key.png'
+                            Label:
+                                id: textLeft
+                                color: 0, 0, 0
+                                text:''
+                        #ArrowDown
+                        RelativeLayout:
+                            Image:
+                                source:'./assets/key.png'
+                            Label:
+                                color: 0, 0, 0
+                                text:''
+                        #ArrowRight
+                        RelativeLayout:
+                            Image:
+                                source:'./assets/key.png'
+                            Label:
+                                id: textRight
+                                color: 0, 0, 0
+                                text:''
+                    
+
+                    Image:
+                        opacity: 0
+                        id: prevImage
+                        source: ''
+                    Label:
+                        text:'Previous Image'
+                        size_hint_y: None
+                        height: 30
+                
+                
+            
+<LoadDialog>:
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: 'vertical'
+        FileChooserListView:
+            id: filechooser
+            dirselect: True
+            filters: [root.is_dir]
+            #path: '.'
+            path: '/home/tscholz/dev/PictureMover'
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Button:
+                text: 'Cancel'
+                on_release: root.cancel()
+            Button:
+                text:'Load'
+                on_release: root.load(filechooser.path)
+
+<History>:
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation:'vertical'
+        ScrollView:
+            #orientation: "tb-lr"
+            canvas.before:
+                Color:
+                    rgb: 0x30 / 255.0, 0x30 / 255.0, 0x30 / 255.0
+                Rectangle:
+                    pos:self.pos
+                    size: self.size
+            GridLayout:
+                row_default_height: 200
+                spacing: 5, 0
+                size_hint_y: None
+                height: self.minimum_height
+                cols: 5
+        Button:
+            size_hint: 1, None
+            height: 30
+            text: 'Confirm Movement'
+            on_release: root.confirm_movement()
+
+        Button:
+            size_hint: 1, None
+            height: 30
+            text: 'Close'
+            on_release: root.cancel()
+        
+
+
